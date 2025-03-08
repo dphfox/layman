@@ -11,12 +11,6 @@ export type Extents = {
 	max: vector
 }
 
-export type Alignment = {
-	implements: { Alignment: true },
-	anchor: vector,
-	mask: vector
-}
-
 export type LaidOut = {
 	implements: { LaidOut: true },
 	extents: UsedAs<Extents>

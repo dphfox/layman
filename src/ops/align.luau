@@ -4,7 +4,6 @@ type UsedAs<T> = Fusion.UsedAs<T>
 
 local types = require("../types")
 type Extents = types.Extents
-type Alignment = types.Alignment
 
 local Extents = require("../structs/extents")
 
@@ -13,17 +12,19 @@ local function align(
 	options: {
 		input: UsedAs<Extents>,
 		within: UsedAs<Extents>,
-		x: UsedAs<number?>,
-		y: UsedAs<number?>,
-		z: UsedAs<number?>,
+		align: {
+			x: UsedAs<number?>,
+			y: UsedAs<number?>,
+			z: UsedAs<number?>
+		},
 		group_bounds: UsedAs<Extents?>
 	}
 ): Extents
 	local input = use(options.input)
 	local within = use(options.within)
-	local x = use(options.x)
-	local y = use(options.y)
-	local z = use(options.z)
+	local x = use(options.align.x)
+	local y = use(options.align.y)
+	local z = use(options.align.z)
 	local extents_to_align = use(options.group_bounds) or input
 
 	local anchor = vector.create(x or 0, y or 0, z or 0)
