@@ -10,20 +10,28 @@ local Extents = require("../structs/extents")
 
 local function align(
 	use: Use,
-	input: Extents,
 	options: {
+		input: UsedAs<Extents>,
 		within: UsedAs<Extents>,
-		group_bounds: UsedAs<Extents?>,
-		alignment: UsedAs<Alignment>
+		x: UsedAs<number?>,
+		y: UsedAs<number?>,
+		z: UsedAs<number?>,
+		group_bounds: UsedAs<Extents?>
 	}
 ): Extents
-	local extents_to_align = use(options.group_bounds) or input
+	local input = use(options.input)
 	local within = use(options.within)
-	local alignment = use(options.alignment)
+	local x = use(options.x)
+	local y = use(options.y)
+	local z = use(options.z)
+	local extents_to_align = use(options.group_bounds) or input
+
+	local anchor = vector.create(x or 0, y or 0, z or 0)
+	local mask = vector.create(if x == nil then 0 else 1, if y == nil then 0 else 1, if z == nil then 0 else 1)
 
 	local min_offset = within.min - extents_to_align.min
 	local max_offset = within.max - extents_to_align.max
-	local offset = alignment.mask * (min_offset + alignment.anchor * (max_offset - min_offset))
+	local offset = mask * (min_offset + anchor * (max_offset - min_offset))
 
 	return Extents.fromOffset(input, offset)
 end
